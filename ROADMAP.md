@@ -11,7 +11,7 @@ The site is live after Phase 1 and stays live. Every phase after that is a push 
 
 ## Open decisions
 
-- [ ] Title: "The Reading River" for now; "Mto wa Vitabu" still under consideration
+- [x] Title: "Marginalia" (chosen 2026-11-15)
 - [x] Until the cover fetcher exists: link covers straight from Open Library by ISBN (title block when there is no ISBN)
 
 ## Phase 1: live on day one (Claude)

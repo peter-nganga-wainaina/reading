@@ -1,4 +1,4 @@
-# The Reading River
+# Marginalia (the reading river)
 
 Peter's personal reading log: a single page that shows the books he finished each year as a timeline ("river"), each with its cover and a short note on what it left behind. It's for himself, not an audience.
 
@@ -68,14 +68,14 @@ The layout comes from Peter's Claude design canvas, board "E2 · Reading River":
 
 - **Opens on the current year.** The years sit in the header under the title ("2026 · 2025 · 2024"), current one in gold, each with its own small book total underneath whichever year is open; moved from the bottom on 2026-11-15 at Peter's request. The newest year links to the homepage.
 - **Header**, centred: title in italic EB Garamond, then the years. (Peter dropped the Swahili proverb on 2026-11-15.)
-  - The working title is "The Reading River". Peter is considering **"Mto wa Vitabu"** (Swahili for "river of books"), so ask him before finalising.
+  - The site is called **"Marginalia"** (Peter chose it on 2026-11-15, replacing the working title "The Reading River"). It's `title` in `config.toml`; the river is still the layout.
 - **River:**
   - A 2px vertical line `#3A3F46` runs down the centre.
   - Months go newest to oldest.
   - A month with books gets a gold pill marker with the month name only (accent background, background-colour text, IBM Plex Mono, uppercase).
   - A month with no books gets just its name as a faint label (Peter dropped "· quiet month" on 2026-11-15).
   - Books alternate left and right of the line, continuing across months. Each has a small gold dot on the line, an 80×120 cover next to the line, then the title, the author in italic, and the note.
-  - The river ends with "January 1 · the river starts".
+  - The river simply ends at January (Peter dropped the "January 1 · the river starts" label on 2026-11-15).
 - **Palette** (dark only, no light mode):
   - Background `#121417`, ink `#ECEAE4`
   - Soft text `#C9C7C0`, muted `#A3A29C`, faint `#8C8B86` (dimmest that passes 4.5:1)
