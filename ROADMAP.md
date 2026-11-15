@@ -4,7 +4,7 @@
 Phase 1 ──▶ Phase 2 ──▶ Phase 3 ──▶ Phase 4 ──▶ Phase 5
  live       river       importer    cover        notes
  (Claude)   (Claude)    (Claude,    fetcher      (Peter)
-                                    Python)     (Claude)
+                         Python)    (Claude)
 ```
 
 The site is live after Phase 1 and stays live. Every phase after that is a push to `main`.
@@ -35,7 +35,7 @@ Built against four real 2026 reads from the export (AGI Chronicles, Talking to S
 - [x] Books alternate left and right across months
 - [x] Cover, or a coloured title block when there is none
 - [x] "read again" tag when `reread = true`
-- [x] Earlier years as plain links at the bottom; each year has its own page
+- [x] Each year has its own page, linked from the others (moved into the header in Phase 4)
 - [x] Phone layout: line on the left, every book on the right
 - [x] No counts and no ratings anywhere
 
@@ -58,15 +58,19 @@ Switched from Rust to Python on 2026-11-15. `importer/storygraph.py`, standard l
 
 ## Phase 4: the cover fetcher (Claude, Python)
 
-A second script next to the importer, so it can share the book-file code. It covers imported books and new ones alike, so the importer never downloads anything.
+`importer/covers.py`, sharing the front-matter code with the importer.
 
-- [ ] Find book files without a cover image
-- [ ] ISBN → `covers.openlibrary.org/b/isbn/<isbn>-L.jpg?default=false`
-- [ ] No ISBN → Open Library search by title + author → `cover_i`
-- [ ] Save to `static/covers/<isbn-or-slug>.jpg`, never overwrite an existing image
-- [ ] Decide how the template learns about the image (e.g. the fetcher adds a `cover` line to the front matter only when it's missing)
-- [ ] Action: run the fetcher before Zola, commit new images back to `main`
-- [ ] Template switches from Open Library links (if used) to local files
+- [x] Find book files without a cover
+- [x] ISBN → edition data → cover ID (cover-ID downloads aren't rate-limited)
+- [x] No cover from that → Open Library search by title + first author → `cover_i`
+- [x] Last resort: the ISBN cover URL (rate-limited, finds covers the edition data doesn't list)
+- [x] Save to `static/covers/<isbn-or-slug>.jpg`, never overwrite an existing image
+- [x] Add a `cover` line to the front matter only when it's missing; the note is never touched
+- [x] Action: run tests, run the fetcher before Zola, commit new covers back to `main`
+- [x] Template uses local covers only (no more Open Library links)
+- [x] Years moved into the header
+- [x] Search falls back to the author's surname ("H.G." vs "H. G." Wells)
+- [x] Fixed wrong covers (Mortality, Philosopher in the Valley) and added missing ones by hand; only The Greatest Sentence Ever Written has none
 
 **Done when** pushing a new `.md` with only an ISBN produces a cover on the live site without doing anything by hand.
 

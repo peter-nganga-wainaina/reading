@@ -2,6 +2,7 @@
 title = "The Death of Ivan Ilych"
 date = 2025-06-08
 [extra]
+cover = "covers/9781600964336.jpg"
 author = "Leo Tolstoy"
 isbn = "9781600964336"
 reread = false

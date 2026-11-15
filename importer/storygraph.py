@@ -129,18 +129,27 @@ def year_page(year: int) -> str:
     return f'+++\ntitle = "{year}"\ntemplate = "year.html"\nsort_by = "date"\n+++\n'
 
 
+def book_paths(books_dir: Path) -> list[Path]:
+    return sorted(path for path in books_dir.glob("*/*.md") if path.name != "_index.md")
+
+
+def front_matter(path: Path) -> dict:
+    """The TOML fields between a book file's +++ lines."""
+    try:
+        _, toml_text, _ = path.read_text().split("+++\n", 2)
+        return tomllib.loads(toml_text)
+    except ValueError as error:
+        raise ValueError(f"Can't read the front matter of {path}") from error
+
+
 def reads_on_river(books_dir: Path) -> set[tuple[str, date]]:
     """(title, finish date) of every book file already there, however it was named."""
     on_river = set()
-    for path in books_dir.glob("*/*.md"):
-        if path.name == "_index.md":
-            continue
-        try:
-            _, toml_text, _ = path.read_text().split("+++\n", 2)
-            fields = tomllib.loads(toml_text)
-            on_river.add((fields["title"], fields["date"]))
-        except (ValueError, KeyError) as error:
-            raise ValueError(f"Can't read the front matter of {path}") from error
+    for path in book_paths(books_dir):
+        fields = front_matter(path)
+        if "title" not in fields or "date" not in fields:
+            raise ValueError(f"{path} needs a title and a date")
+        on_river.add((fields["title"], fields["date"]))
     return on_river
 
 

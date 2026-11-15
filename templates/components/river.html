@@ -8,9 +8,22 @@
 {% set is_current_year = year.title == now() | date(format="%Y") %}
 {% set newest_month = now() | date(format="%m") | int if is_current_year else 12 %}
 
+{% set books = get_section(path="books/_index.md") %}
+{% set year_paths = books.subsections | sort | reverse %}
 <header class="masthead">
   <h1>{{ site_title }}</h1>
-  <p class="year">{{ year.title }}</p>
+  <nav class="years" aria-label="Years">
+    {% for path in year_paths %}
+      {% set other = get_section(path=path, metadata_only=true) %}
+      {# The newest year is the homepage, so link there rather than to a second copy of it. #}
+      {% set other_url = get_url(path="/", trailing_slash=true) if loop.first else other.permalink %}
+      {% if other.title == year.title %}
+        <span aria-current="page">{{ other.title }}</span>
+      {% else %}
+        <a href="{{ other_url }}">{{ other.title }}</a>
+      {% endif %}
+    {% endfor %}
+  </nav>
 </header>
 
 <div class="river">
@@ -32,21 +45,16 @@
       {% for book in year.pages %}
         {% if book.month == month %}
           {% set side = "left" if loop.index0 % 2 == 0 else "right" %}
-          {% set isbn = book.extra?.isbn or "" %}
-          {% set local_cover = book.extra?.cover or "" %}
+          {% set cover = book.extra?.cover or "" %}
           <article class="book book--{{ side }}" id="{{ book.slug }}">
             <div class="book-body">
               {# Decorative: the title and author are right beside it. The title block is always
-                 drawn; a cover image sits on top of it and removes itself if it fails to load. #}
+                 drawn, and the cover image (saved by importer/covers.py) sits on top of it. #}
               <div class="cover cover--{{ loop.index0 % 8 }}" aria-hidden="true">
                 <span class="cover-title">{{ book.title }}</span>
                 <span class="cover-author">{{ book.extra?.author or "" }}</span>
-                {% if local_cover %}
-                  <img src="{{ get_url(path=local_cover) }}" alt="" loading="lazy">
-                {% elif isbn %}
-                  {# default=false makes Open Library answer 404 instead of a blank 1×1 image. #}
-                  <img src="https://covers.openlibrary.org/b/isbn/{{ isbn }}-L.jpg?default=false"
-                       alt="" loading="lazy" onerror="this.remove()">
+                {% if cover %}
+                  <img src="{{ get_url(path=cover) }}" alt="" loading="lazy">
                 {% endif %}
               </div>
               <div class="book-text">
@@ -72,16 +80,4 @@
   </div>
 </div>
 
-{% set books = get_section(path="books/_index.md") %}
-{% set year_paths = books.subsections | sort | reverse %}
-{% if year_paths | length > 1 %}
-<nav class="earlier-years" aria-label="Other years">
-  {% for path in year_paths %}
-    {% set other = get_section(path=path, metadata_only=true) %}
-    {% if other.title != year.title %}
-      <a href="{{ other.permalink }}">{{ other.title }} →</a>
-    {% endif %}
-  {% endfor %}
-</nav>
-{% endif %}
 {% endcomponent river %}

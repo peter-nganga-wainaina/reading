@@ -55,11 +55,35 @@ a {
     line-height: 1;
   }
 
-  .year {
+  .years {
     margin: 12px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 8px;
     font-family: $mono;
     font-size: 15px;
-    color: $muted;
+
+    a,
+    span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 12px;
+    }
+
+    a {
+      color: $muted;
+      text-decoration: none;
+
+      &:hover {
+        color: $accent-light;
+      }
+    }
+
+    [aria-current="page"] {
+      color: $accent;
+    }
   }
 }
 
@@ -268,27 +292,6 @@ $cover-colours: (
 .note--empty {
   font-style: italic;
   color: $faint;
-}
-
-.earlier-years {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-  border-top: 1px solid $rule;
-  padding-top: 32px;
-
-  a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    padding: 0 20px;
-    border: 1px solid $river;
-    border-radius: 999px;
-    text-decoration: none;
-    font-family: $mono;
-    font-size: 14px;
-  }
 }
 
 // Phones: the line moves to the left edge and every book sits to its right.

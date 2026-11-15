@@ -36,9 +36,10 @@ reading/
 ├── templates/year.html                 ← one year's page
 ├── templates/components/river.html     ← the river itself, shared by both
 ├── sass/river.scss
-├── static/covers/<isbn-or-slug>.jpg    ← saved by the cover fetcher (Phase 4)
-├── importer/storygraph.py              ← StoryGraph CSV → book files
-├── importer/test_storygraph.py         ← python3 -m unittest (run inside importer/)
+├── static/covers/<isbn-or-slug>.jpg    ← saved by importer/covers.py, committed
+├── importer/storygraph.py              ← StoryGraph CSV → book files (one-time)
+├── importer/covers.py                  ← fetches missing covers (runs in the Action)
+├── importer/test_*.py                  ← python3 -m unittest discover -s importer
 └── .github/workflows/deploy.yml
 ```
 
@@ -55,7 +56,7 @@ date = 2026-04-14            # finish date: decides year and month
 [extra]
 author = "Steven Levitsky & Daniel Ziblatt"
 isbn = "9781524762933"       # optional
-cover = "covers/9781524762933.jpg"
+cover = "covers/9781524762933.jpg"  # added by covers.py; don't write it by hand
 reread = false               # true shows a "read again" tag
 +++
 Peter's note goes here. Can be empty at first.
@@ -65,8 +66,8 @@ Peter's note goes here. Can be empty at first.
 
 The layout comes from Peter's Claude design canvas, board "E2 · Reading River": https://claude.ai/artifact/4EX1RUyH2ZjH1LoRnGJU4g. On 2026-11-15 Peter switched to a **dark** look (the canvas's "Night" theme) and dropped the kanga/kitenge styling ("not really me"). The canvas's cream and red colours are out of date; the palette below wins.
 
-- **Opens on the current year.** Earlier years are plain links at the bottom ("2025 →", "2024 →") to their own year pages.
-- **Header**, centred: title in italic EB Garamond, then just the year. (Peter dropped the Swahili proverb on 2026-11-15.)
+- **Opens on the current year.** The years sit in the header under the title ("2026 · 2025 · 2024"), current one in gold; moved from the bottom on 2026-11-15 at Peter's request. The newest year links to the homepage.
+- **Header**, centred: title in italic EB Garamond, then the years. (Peter dropped the Swahili proverb on 2026-11-15.)
   - The working title is "The Reading River". Peter is considering **"Mto wa Vitabu"** (Swahili for "river of books"), so ask him before finalising.
 - **River:**
   - A 2px vertical line `#3A3F46` runs down the centre.
@@ -80,7 +81,7 @@ The layout comes from Peter's Claude design canvas, board "E2 · Reading River":
   - Soft text `#C9C7C0`, muted `#A3A29C`, faint `#8C8B86` (dimmest that passes 4.5:1)
   - Rules `#2C3036`, river line `#3A3F46`, accent gold `#E8C27A`, link hover `#F2D9A6`
 - **Fonts** (Google Fonts): EB Garamond for headings and body, IBM Plex Mono for labels.
-- **Covers:** use real covers when available. Otherwise use a coloured block with the title and author.
+- **Covers:** local images from `static/covers/` only (no hotlinking). Otherwise a coloured block with the title and author.
 - **Phones:** move the river line to the left edge and put every book on the right.
 
 ## StoryGraph import rules (decided with Peter)
@@ -101,8 +102,10 @@ Run from the repo root: `python3 importer/storygraph.py importer/data/storygraph
 ## Covers (decided 2026-11-15)
 
 - The importer is a one-time move from StoryGraph. It writes `.md` files only and never downloads covers.
-- A separate **cover fetcher** (Python, next to the importer in `importer/`) runs in the GitHub Action before Zola. It fetches covers for any book file that lacks one (ISBN first, then title + author search), saves them to `static/covers/`, and commits them back to `main`.
-- Adding a book stays one `.md` file. An `isbn` is enough to get a cover with no manual work.
+- **`importer/covers.py`** runs in the GitHub Action before Zola, for every book file without a `cover`: edition data by ISBN → cover ID, else title + first-author search (then title + surname, since initials are written differently) → cover ID, else the ISBN cover URL (rate-limited at 100 per 5 minutes, so last). It saves `static/covers/<isbn-or-slug>.jpg`, adds a `cover` line to the front matter, and the Action commits both back to `main`. Peter has to `git pull` after pushing a book.
+- It never replaces an existing image. **To fix a wrong cover**, overwrite the file in `static/covers/` (Claude does this when asked: find a better image, check it by eye, put it in place). Fixed on 2026-11-15: *Mortality* (better Open Library edition), and *The Philosopher in the Valley*, *Into the Wood Chipper*, *On Disinformation*, *The Second Estate* (from Amazon's image-by-ISBN URL, one-off by hand; Google Books was rate-limiting).
+- Only *The Greatest Sentence Ever Written* has no cover anywhere tried, so it shows the title block; the fetcher retries on every run. Network errors are logged, never fatal.
+- Adding a book stays one `.md` file. An `isbn` (or just title + author) is enough to get a cover with no manual work.
 
 ## Build order
 

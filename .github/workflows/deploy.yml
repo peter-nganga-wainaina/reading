@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write  # to commit newly fetched covers back to main
   pages: write
   id-token: write
 
@@ -24,6 +24,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Test the importer and cover fetcher
+        run: python3 -m unittest discover -s importer
+
+      # Never fails the build: books Open Library can't help with keep their title block.
+      - name: Fetch covers for new books
+        run: python3 importer/covers.py content/books static/covers
+
+      # Pushes made with the workflow's own token don't trigger another run, so this can't loop.
+      # If main moved on meanwhile the push is refused; this build still has the covers, and the
+      # next run fetches them again.
+      - name: Commit new covers
+        run: |
+          if [ -n "$(git status --porcelain content static)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add content static
+            git commit -m "Add covers for new books"
+            git push || echo "::warning::Couldn't push the new covers; the next run will fetch them again."
+          fi
 
       - name: Install Zola
         run: |
