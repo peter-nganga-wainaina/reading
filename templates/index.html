@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+{# Year folders are named by year, so the last one in sorted order is the current year. #}
+{% set books = get_section(path="books/_index.md") %}
+{% set current_year = get_section(path=books.subsections | sort | last) %}
+{{ <river year={current_year} site_title={config.title} /> }}
+{% endblock %}

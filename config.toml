@@ -1,0 +1,4 @@
+base_url = "https://peter-nganga-wainaina.github.io/reading"
+title = "The Reading River"
+compile_sass = true
+build_search_index = false

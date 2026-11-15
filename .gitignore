@@ -1,0 +1,6 @@
+# Zola build output
+public/
+
+# StoryGraph export: holds ratings and other private data
+importer/data/
+importer/target/

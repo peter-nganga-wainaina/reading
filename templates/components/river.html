@@ -1,0 +1,28 @@
+{# The river for one year section. Used by the homepage (current year) and every year page.
+   Components only see what's passed in, so the site title comes in as a parameter. #}
+{% component river(year, site_title) %}
+<header class="masthead">
+  <h1>{{ site_title }}</h1>
+  <p class="year">{{ year.title }}</p>
+</header>
+
+<div class="river">
+  <div class="river-line" aria-hidden="true"></div>
+  <div class="river-marker">
+    <span class="quiet">January 1 · the river starts</span>
+  </div>
+</div>
+
+{% set books = get_section(path="books/_index.md") %}
+{% set year_paths = books.subsections | sort | reverse %}
+{% if year_paths | length > 1 %}
+<nav class="earlier-years" aria-label="Earlier years">
+  {% for path in year_paths %}
+    {% set other = get_section(path=path, metadata_only=true) %}
+    {% if other.title != year.title %}
+      <a href="{{ other.permalink }}">{{ other.title }} →</a>
+    {% endif %}
+  {% endfor %}
+</nav>
+{% endif %}
+{% endcomponent river %}

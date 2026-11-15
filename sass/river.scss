@@ -1,0 +1,119 @@
+// Dark palette, from the "Night" theme on Peter's mockup canvas.
+$background: #121417;
+$ink: #ECEAE4;
+$soft: #C9C7C0;
+$muted: #A3A29C;
+$faint: #8C8B86;   // the dimmest text that still reads at 4.5:1 on the background
+$rule: #2C3036;
+$river: #3A3F46;
+$accent: #E8C27A;
+$accent-light: #F2D9A6;
+
+$serif: 'EB Garamond', Georgia, serif;
+$mono: 'IBM Plex Mono', monospace;
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: $background;
+  color: $ink;
+  font-family: $serif;
+}
+
+a {
+  color: $accent;
+
+  &:hover {
+    color: $accent-light;
+  }
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 86px 24px 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.masthead {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+
+  h1 {
+    margin: 0;
+    font-size: clamp(48px, 7vw, 80px);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1;
+  }
+
+  .year {
+    margin: 12px 0 0;
+    font-family: $mono;
+    font-size: 15px;
+    color: $muted;
+  }
+}
+
+.river {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.river-line {
+  position: absolute;
+  left: 50%;
+  top: 24px;
+  bottom: 40px;
+  width: 2px;
+  margin-left: -1px;
+  background: $river;
+}
+
+.river-marker {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding-top: 24px;
+}
+
+.quiet {
+  background: $background;
+  padding: 2px 12px;
+  font-family: $mono;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $faint;
+}
+
+.earlier-years {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  border-top: 1px solid $rule;
+  padding-top: 32px;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 20px;
+    border: 1px solid $river;
+    border-radius: 999px;
+    text-decoration: none;
+    font-family: $mono;
+    font-size: 14px;
+  }
+}
