@@ -62,28 +62,36 @@ a {
     justify-content: center;
     gap: 4px 8px;
     font-family: $mono;
+  }
+
+  .year {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-height: 44px;
+    padding: 4px 12px;
+    text-decoration: none;
+    color: $muted;
+  }
+
+  a.year:hover .year-name {
+    color: $accent-light;
+  }
+
+  .year-name {
     font-size: 15px;
+  }
 
-    a,
-    span {
-      display: inline-flex;
-      align-items: center;
-      min-height: 44px;
-      padding: 0 12px;
-    }
+  [aria-current="page"] .year-name {
+    color: $accent;
+  }
 
-    a {
-      color: $muted;
-      text-decoration: none;
-
-      &:hover {
-        color: $accent-light;
-      }
-    }
-
-    [aria-current="page"] {
-      color: $accent;
-    }
+  .year-count {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $faint;
   }
 }
 

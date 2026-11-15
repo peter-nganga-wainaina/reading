@@ -14,13 +14,18 @@
   <h1>{{ site_title }}</h1>
   <nav class="years" aria-label="Years">
     {% for path in year_paths %}
-      {% set other = get_section(path=path, metadata_only=true) %}
+      {% set other = get_section(path=path) %}
+      {% set book_count = other.pages | length %}
       {# The newest year is the homepage, so link there rather than to a second copy of it. #}
       {% set other_url = get_url(path="/", trailing_slash=true) if loop.first else other.permalink %}
+      {% set year_label %}
+        <span class="year-name">{{ other.title }}</span>
+        <span class="year-count">{{ book_count }}</span>
+      {% endset %}
       {% if other.title == year.title %}
-        <span aria-current="page">{{ other.title }}</span>
+        <span class="year" aria-current="page">{{ year_label | safe }}</span>
       {% else %}
-        <a href="{{ other_url }}">{{ other.title }}</a>
+        <a class="year" href="{{ other_url }}">{{ year_label | safe }}</a>
       {% endif %}
     {% endfor %}
   </nav>

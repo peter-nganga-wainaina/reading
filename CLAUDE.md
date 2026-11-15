@@ -12,7 +12,7 @@ Peter's personal reading log: a single page that shows the books he finished eac
 
 ## Non-negotiables
 
-- **No counts anywhere**: no "12 books", no per-month or per-year totals. It shouldn't feel like tracking.
+- **No per-month counts**: months never show how many books. It shouldn't feel like tracking. (A small per-year total under the years is fine: Peter, 2026-11-15.)
 - **No ratings.**
 - **Only finished books.**
 - Adding a book must stay trivial: one Markdown file, then push.
@@ -66,7 +66,7 @@ Peter's note goes here. Can be empty at first.
 
 The layout comes from Peter's Claude design canvas, board "E2 · Reading River": https://claude.ai/artifact/4EX1RUyH2ZjH1LoRnGJU4g. On 2026-11-15 Peter switched to a **dark** look (the canvas's "Night" theme) and dropped the kanga/kitenge styling ("not really me"). The canvas's cream and red colours are out of date; the palette below wins.
 
-- **Opens on the current year.** The years sit in the header under the title ("2026 · 2025 · 2024"), current one in gold; moved from the bottom on 2026-11-15 at Peter's request. The newest year links to the homepage.
+- **Opens on the current year.** The years sit in the header under the title ("2026 · 2025 · 2024"), current one in gold, each with its own small book total underneath whichever year is open; moved from the bottom on 2026-11-15 at Peter's request. The newest year links to the homepage.
 - **Header**, centred: title in italic EB Garamond, then the years. (Peter dropped the Swahili proverb on 2026-11-15.)
   - The working title is "The Reading River". Peter is considering **"Mto wa Vitabu"** (Swahili for "river of books"), so ask him before finalising.
 - **River:**

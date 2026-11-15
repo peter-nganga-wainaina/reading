@@ -37,7 +37,7 @@ Built against four real 2026 reads from the export (AGI Chronicles, Talking to S
 - [x] "read again" tag when `reread = true`
 - [x] Each year has its own page, linked from the others (moved into the header in Phase 4)
 - [x] Phone layout: line on the left, every book on the right
-- [x] No counts and no ratings anywhere
+- [x] No per-month counts and no ratings (a per-year total was added later at Peter's request)
 
 **Done when** the river matches the mockup on desktop and phone.
 
