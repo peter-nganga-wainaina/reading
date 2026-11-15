@@ -67,7 +67,7 @@ Peter's note goes here. Can be empty at first.
 The layout comes from Peter's Claude design canvas, board "E2 · Reading River": https://claude.ai/artifact/4EX1RUyH2ZjH1LoRnGJU4g. On 2026-11-15 Peter switched to a **dark** look (the canvas's "Night" theme) and dropped the kanga/kitenge styling ("not really me"). The canvas's cream and red colours are out of date; the palette below wins.
 
 - **Opens on the current year.** The years sit in the header under the title ("2026 · 2025 · 2024"), current one in gold, each with its own small book total underneath whichever year is open; moved from the bottom on 2026-11-15 at Peter's request. The newest year links to the homepage.
-- **Header**, centred: title in italic EB Garamond, then the years. (Peter dropped the Swahili proverb on 2026-11-15.)
+- **Header**, centred: title in italic EB Garamond, then an epigraph from *Brave New World* ("That the purpose of life was not the maintenance of well-being…", added by Peter 2026-11-15), then the years. (Peter dropped the Swahili proverb on 2026-11-15.)
   - The site is called **"Marginalia"** (Peter chose it on 2026-11-15, replacing the working title "The Reading River"). It's `title` in `config.toml`; the river is still the layout.
 - **River:**
   - A 2px vertical line `#3A3F46` runs down the centre.

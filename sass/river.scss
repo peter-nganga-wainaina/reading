@@ -55,6 +55,31 @@ a {
     line-height: 1;
   }
 
+  .epigraph {
+    margin: 8px 0 0;
+    max-width: 560px;
+
+    blockquote {
+      margin: 0;
+      font-size: 19px;
+      font-style: italic;
+      line-height: 1.5;
+      color: $soft;
+    }
+
+    figcaption {
+      margin-top: 8px;
+      font-family: $mono;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      color: $faint;
+    }
+
+    cite {
+      font-style: italic;
+    }
+  }
+
   .years {
     margin: 12px 0 0;
     display: flex;

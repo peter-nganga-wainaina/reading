@@ -12,6 +12,10 @@
 {% set year_paths = books.subsections | sort | reverse %}
 <header class="masthead">
   <h1>{{ site_title }}</h1>
+  <figure class="epigraph">
+    <blockquote>That the purpose of life was not the maintenance of well-being, but some intensification and refining of consciousness, some enlargement of knowledge.</blockquote>
+    <figcaption>Aldous Huxley, <cite>Brave New World</cite></figcaption>
+  </figure>
   <nav class="years" aria-label="Years">
     {% for path in year_paths %}
       {% set other = get_section(path=path) %}
