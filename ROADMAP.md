@@ -3,8 +3,8 @@
 ```
 Phase 1 ──▶ Phase 2 ──▶ Phase 3 ──▶ Phase 4 ──▶ Phase 5
  live       river       importer    cover        notes
- (Claude)   (Claude)    (Peter)     fetcher      (Peter)
-                                    (Peter)
+ (Claude)   (Claude)    (Claude,    fetcher      (Peter)
+                                    Python)     (Claude)
 ```
 
 The site is live after Phase 1 and stays live. Every phase after that is a push to `main`.
@@ -17,7 +17,7 @@ The site is live after Phase 1 and stays live. Every phase after that is a push 
 ## Phase 1: live on day one (Claude)
 
 - [x] `config.toml` with `base_url = "https://peter-nganga-wainaina.github.io/reading"`
-- [x] `.gitignore`: `public/`, `importer/data/`, `importer/target/`
+- [x] `.gitignore`: `public/`, `importer/data/`
 - [x] `templates/base.html`: Google Fonts, page shell
 - [x] `templates/year.html`, `templates/index.html`, `templates/components/river.html`: header (title + year), empty river, "January 1 · the river starts"
 - [x] `sass/river.scss`: dark palette
@@ -41,23 +41,24 @@ Built against four real 2026 reads from the export (AGI Chronicles, Talking to S
 
 **Done when** the river matches the mockup on desktop and phone.
 
-## Phase 3: the importer, the one-time move from StoryGraph (Peter)
+## Phase 3: the importer, the one-time move from StoryGraph (Claude, Python)
 
-- [ ] Install Rust (`rustup`), `cargo new importer`
-- [ ] Read the CSV with `csv` + `serde`, keep only `Read Status = read`
-- [ ] Parse `Dates Read` with `chrono`: one read per range, finish date = end of range
-- [ ] Rereads: one file per read, later reads get `reread = true`
-- [ ] Special cases: Unbearable Lightness (July 2026), skip and flag A Hunger Artist and Young Zaphod
-- [ ] Drop subtitles after `:`
-- [ ] Write `content/books/<year>/<slug>.md` with the ISBN when there is one
-- [ ] Safe to rerun: never overwrite, match by title + finish date
-- [ ] Unit tests for date parsing, titles and rerun safety
+Switched from Rust to Python on 2026-11-15. `importer/storygraph.py`, standard library only.
+
+- [x] Keep only `Read Status = read`
+- [x] One read per `Dates Read` range, finish date = end of range (later date if the range runs backwards, which covers Unbearable Lightness)
+- [x] Rereads: one file per read, later reads get `reread = true`
+- [x] Books with no read dates use the date added (A Hunger Artist, Young Zaphod); undated extra reads are left out (The God Delusion, Free Will)
+- [x] Drop subtitles after `:`
+- [x] Write `content/books/<year>/<slug>.md` with the ISBN when there is one, plus a year page for new years
+- [x] Safe to rerun: never overwrite, match by title + finish date
+- [x] Unit tests (`python3 -m unittest` in `importer/`)
 
 **Done when** the old reads are on the live river, and a second run changes nothing.
 
-## Phase 4: the cover fetcher (Peter writes it, Claude wires up the Action)
+## Phase 4: the cover fetcher (Claude, Python)
 
-A second binary in the same cargo project, so it can share the book-file code with the importer. It covers imported books and new ones alike, so the importer never downloads anything.
+A second script next to the importer, so it can share the book-file code. It covers imported books and new ones alike, so the importer never downloads anything.
 
 - [ ] Find book files without a cover image
 - [ ] ISBN → `covers.openlibrary.org/b/isbn/<isbn>-L.jpg?default=false`

@@ -3,4 +3,6 @@ public/
 
 # StoryGraph export: holds ratings and other private data
 importer/data/
-importer/target/
+
+# Python bytecode
+__pycache__/

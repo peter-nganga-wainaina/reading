@@ -2,12 +2,12 @@
 
 Peter's personal reading log: a single page that shows the books he finished each year as a timeline ("river"), each with its cover and a short note on what it left behind. It's for himself, not an audience.
 
-**Goal of this project:** get the site live with Zola, and use the StoryGraph importer as Peter's first real Rust program.
+**Goal of this project:** get the site live with Zola, with Peter's StoryGraph history on it. (The importer was going to be Peter's first Rust program; on 2026-11-15 he switched it to Python, written by Claude.)
 
 ## How to work with Peter
 
 - **Zola templates, Sass and deploy config:** go ahead and write these.
-- **The Rust importer (`importer/`):** Peter writes this himself to learn Rust. Explain concepts, review his code and help with compiler errors, but don't write the program for him unless he asks. Point him to the relevant crate docs.
+- **The importer and cover fetcher (`importer/`, Python):** Claude writes these, test-first, standard library only. Peter reviews.
 - When he's confused or going back and forth, simplify the explanation or draw a flowchart.
 
 ## Non-negotiables
@@ -36,8 +36,9 @@ reading/
 ├── templates/year.html                 ← one year's page
 ├── templates/components/river.html     ← the river itself, shared by both
 ├── sass/river.scss
-├── static/covers/<isbn-or-slug>.jpg    ← downloaded once by the importer
-├── importer/                           ← Peter's Rust crate (cargo project)
+├── static/covers/<isbn-or-slug>.jpg    ← saved by the cover fetcher (Phase 4)
+├── importer/storygraph.py              ← StoryGraph CSV → book files
+├── importer/test_storygraph.py         ← python3 -m unittest (run inside importer/)
 └── .github/workflows/deploy.yml
 ```
 
@@ -84,11 +85,14 @@ The layout comes from Peter's Claude design canvas, board "E2 · Reading River":
 
 ## StoryGraph import rules (decided with Peter)
 
+Run from the repo root: `python3 importer/storygraph.py importer/data/storygraph.csv content/books`. The full history was imported on 2026-11-15.
+
+
 1. Import only rows with `Read Status = read`. Skip `to-read` and `did-not-finish`.
 2. A book's finish date is the end of a range in `Dates Read`. Its month decides where it goes on the river.
 3. **Rereads appear in every year they were read.** `Dates Read` can hold several ranges separated by commas. Create one file per read; every read after the first gets `reread = true`.
-4. Fix: *The Unbearable Lightness of Being* has a backwards range (2026/07/06–2026/06/20). Treat it as **finished July 2026**.
-5. *A Hunger Artist* and *Young Zaphod Plays It Safe* have no dates. Peter will add them by hand, so skip them or flag them.
+4. Fix: *The Unbearable Lightness of Being* has a backwards range (2026/07/06–2026/06/20). Treat it as **finished July 2026**. (Implemented generally: a backwards range finishes on its later date.)
+5. A finished book with no read dates finishes on its `Date Added` (Peter's choice, 2026-11-15: *A Hunger Artist* → Feb 2024, *Young Zaphod Plays It Safe* → Jan 2024). Reads StoryGraph counts but never dated are left out (the 2nd read of *The God Delusion*, the 3rd of *Free Will*).
 6. If a book has no ISBN, look up its cover on Open Library by title and author.
 7. Drop the rating, moods and pace. Use the StoryGraph review as the starting note if there is one (currently they're all empty).
 8. **Running it again must be safe:** never overwrite an existing file or note. Only add reads that are missing, matched by title and finish date.
@@ -97,7 +101,7 @@ The layout comes from Peter's Claude design canvas, board "E2 · Reading River":
 ## Covers (decided 2026-11-15)
 
 - The importer is a one-time move from StoryGraph. It writes `.md` files only and never downloads covers.
-- A separate **cover fetcher** (Peter's second Rust binary, same cargo project) runs in the GitHub Action before Zola. It fetches covers for any book file that lacks one (ISBN first, then title + author search), saves them to `static/covers/`, and commits them back to `main`.
+- A separate **cover fetcher** (Python, next to the importer in `importer/`) runs in the GitHub Action before Zola. It fetches covers for any book file that lacks one (ISBN first, then title + author search), saves them to `static/covers/`, and commits them back to `main`.
 - Adding a book stays one `.md` file. An `isbn` is enough to get a cover with no manual work.
 
 ## Build order

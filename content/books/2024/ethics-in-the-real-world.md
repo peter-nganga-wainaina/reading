@@ -1,0 +1,8 @@
++++
+title = "Ethics in the Real World"
+date = 2024-11-14
+[extra]
+author = "Peter Singer"
+isbn = "9781922790316"
+reread = false
++++
