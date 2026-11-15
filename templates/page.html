@@ -1,0 +1,15 @@
+{# Books have no page of their own: send anyone who lands here to the book's place on its year's river. #}
+{% set year = get_section(path=page.ancestors | last, metadata_only=true) %}
+{% set river_url = year.permalink ~ "#" ~ page.slug %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="0; url={{ river_url }}">
+  <link rel="canonical" href="{{ river_url }}">
+  <title>{{ page.title }}</title>
+</head>
+<body>
+  <a href="{{ river_url }}">{{ page.title }}</a>
+</body>
+</html>

@@ -71,7 +71,7 @@ The layout comes from Peter's Claude design canvas, board "E2 · Reading River":
   - A 2px vertical line `#3A3F46` runs down the centre.
   - Months go newest to oldest.
   - A month with books gets a gold pill marker with the month name only (accent background, background-colour text, IBM Plex Mono, uppercase).
-  - A month with no books gets a faint "<Month> · quiet month" label.
+  - A month with no books gets just its name as a faint label (Peter dropped "· quiet month" on 2026-11-15).
   - Books alternate left and right of the line, continuing across months. Each has a small gold dot on the line, an 80×120 cover next to the line, then the title, the author in italic, and the note.
   - The river ends with "January 1 · the river starts".
 - **Palette** (dark only, no light mode):

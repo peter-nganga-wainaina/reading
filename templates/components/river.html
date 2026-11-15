@@ -1,6 +1,13 @@
 {# The river for one year section. Used by the homepage (current year) and every year page.
    Components only see what's passed in, so the site title comes in as a parameter. #}
 {% component river(year, site_title) %}
+{% set month_names = ["January", "February", "March", "April", "May", "June", "July",
+                      "August", "September", "October", "November", "December"] %}
+{# The current year's river starts at this month, not December, so months that haven't happened
+   yet don't show. The site is rebuilt on every push, so this is the month of the last push. #}
+{% set is_current_year = year.title == now() | date(format="%Y") %}
+{% set newest_month = now() | date(format="%m") | int if is_current_year else 12 %}
+
 <header class="masthead">
   <h1>{{ site_title }}</h1>
   <p class="year">{{ year.title }}</p>
@@ -8,7 +15,59 @@
 
 <div class="river">
   <div class="river-line" aria-hidden="true"></div>
-  <div class="river-marker">
+
+  {% for month in range(start=newest_month, end=0, step_by=-1) %}
+    {% set books_this_month = [book for book in year.pages if book.month == month] %}
+    <section class="month" aria-label="{{ month_names[month - 1] }}">
+      <div class="river-marker">
+        {% if books_this_month | length > 0 %}
+          <h2 class="month-pill">{{ month_names[month - 1] }}</h2>
+        {% else %}
+          <span class="quiet">{{ month_names[month - 1] }}</span>
+        {% endif %}
+      </div>
+
+      {# Loop over the whole year (newest first) rather than just this month, so a book's
+         position in the year decides its side and the alternation carries across months. #}
+      {% for book in year.pages %}
+        {% if book.month == month %}
+          {% set side = "left" if loop.index0 % 2 == 0 else "right" %}
+          {% set isbn = book.extra?.isbn or "" %}
+          {% set local_cover = book.extra?.cover or "" %}
+          <article class="book book--{{ side }}" id="{{ book.slug }}">
+            <div class="book-body">
+              {# Decorative: the title and author are right beside it. The title block is always
+                 drawn; a cover image sits on top of it and removes itself if it fails to load. #}
+              <div class="cover cover--{{ loop.index0 % 8 }}" aria-hidden="true">
+                <span class="cover-title">{{ book.title }}</span>
+                <span class="cover-author">{{ book.extra?.author or "" }}</span>
+                {% if local_cover %}
+                  <img src="{{ get_url(path=local_cover) }}" alt="" loading="lazy">
+                {% elif isbn %}
+                  {# default=false makes Open Library answer 404 instead of a blank 1×1 image. #}
+                  <img src="https://covers.openlibrary.org/b/isbn/{{ isbn }}-L.jpg?default=false"
+                       alt="" loading="lazy" onerror="this.remove()">
+                {% endif %}
+              </div>
+              <div class="book-text">
+                <h3>{{ book.title }}</h3>
+                <p class="author">{{ book.extra?.author or "" }}{% if book.extra?.reread %}<span class="reread"> · read again</span>{% endif %}</p>
+                {% if book.content | trim %}
+                  <div class="note">{{ book.content | safe }}</div>
+                {% else %}
+                  <p class="note note--empty">No note yet.</p>
+                {% endif %}
+              </div>
+            </div>
+            <div class="book-dot" aria-hidden="true"><span></span></div>
+            <div class="book-spacer"></div>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </section>
+  {% endfor %}
+
+  <div class="river-marker river-end">
     <span class="quiet">January 1 · the river starts</span>
   </div>
 </div>
@@ -16,7 +75,7 @@
 {% set books = get_section(path="books/_index.md") %}
 {% set year_paths = books.subsections | sort | reverse %}
 {% if year_paths | length > 1 %}
-<nav class="earlier-years" aria-label="Earlier years">
+<nav class="earlier-years" aria-label="Other years">
   {% for path in year_paths %}
     {% set other = get_section(path=path, metadata_only=true) %}
     {% if other.title != year.title %}

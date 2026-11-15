@@ -22,22 +22,22 @@ The site is live after Phase 1 and stays live. Every phase after that is a push 
 - [x] `templates/year.html`, `templates/index.html`, `templates/components/river.html`: header (title + year), empty river, "January 1 · the river starts"
 - [x] `sass/river.scss`: dark palette
 - [x] `.github/workflows/deploy.yml`: build with Zola on every push to `main`
-- [ ] Peter: turn on GitHub Pages (Settings → Pages → Source: GitHub Actions)
+- [x] Peter: turn on GitHub Pages (Settings → Pages → Source: GitHub Actions)
 
 **Done when** the Pages URL shows the dark page with the 2026 header.
 
 ## Phase 2: the full river (Claude)
 
-Built against two or three hand-written sample books so it can be checked before the importer exists.
+Built against four real 2026 reads from the export (AGI Chronicles, Talking to Strangers, Mortality, How Democracies Die) so it can be checked before the importer exists.
 
-- [ ] Month grouping, newest to oldest, with gold pill markers
-- [ ] "<Month> · quiet month" for empty months
-- [ ] Books alternate left and right across months
-- [ ] Cover, or a coloured title block when there is none
-- [ ] "read again" tag when `reread = true`
-- [ ] Earlier years as plain links at the bottom; each year has its own page
-- [ ] Phone layout: line on the left, every book on the right
-- [ ] No counts and no ratings anywhere
+- [x] Month grouping, newest to oldest, with gold pill markers
+- [x] Faint month name (no pill) for empty months
+- [x] Books alternate left and right across months
+- [x] Cover, or a coloured title block when there is none
+- [x] "read again" tag when `reread = true`
+- [x] Earlier years as plain links at the bottom; each year has its own page
+- [x] Phone layout: line on the left, every book on the right
+- [x] No counts and no ratings anywhere
 
 **Done when** the river matches the mockup on desktop and phone.
 
